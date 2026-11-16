@@ -77,11 +77,11 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-        "accounts.permissions.ReadOnlyForViewer",
+        # "accounts.permissions.ReadOnlyForViewer",
     ],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
-    "DEFAULT_PAGINATION_CLASS": "apps.core.api.pagination.EnvelopePagination",
+    "DEFAULT_PAGINATION_CLASS": "core.api.pagination.EnvelopePagination",
     "EXCEPTION_HANDLER": "core.api.exceptions.envelope_exception_handler",
     # `?format=` is a report parameter (json or pdf), not a renderer switch.
     "URL_FORMAT_OVERRIDE": None,

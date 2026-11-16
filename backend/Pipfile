@@ -7,11 +7,11 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 djoser = "*"
-django-filter = "*"
 psycopg = "*"
 drf-spectacular = "*"
 reportlab = "*"
 django-environ = "*"
+django-filter = "*"
 
 [dev-packages]
 pytest = "*"
