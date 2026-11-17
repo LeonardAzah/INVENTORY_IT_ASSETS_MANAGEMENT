@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     "djoser",
     "core",
     "notifications",
+    "audit",
+    "organization",
 ]
 
 MIDDLEWARE = [

@@ -52,10 +52,10 @@ class GenericListViewAPI(ScopedListMixin, ListAPIView):
     `get_queryset()`, before any filter backend runs.
     """
 
-class GenericListCreateViewAPI():
+class GenericListCreateViewAPI(ScopedListMixin, ListCreateAPIView):
     """List plus POST (DRF's `ListCreateAPIView`). The write is done in `perform_create`
     by `create_service(actor, **validated_data)`, never by `serializer.save()`: services
-    own all writes (N-1)."""
+    own all writes."""
 
     input_serializer_class = None
     create_service = None
