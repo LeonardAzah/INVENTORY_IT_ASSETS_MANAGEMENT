@@ -25,7 +25,9 @@ INSTALLED_APPS = [
     "core",
     "notifications",
     "audit",
+    "accounts",
     "organization",
+    "employees",
 ]
 
 MIDDLEWARE = [
@@ -52,7 +54,7 @@ DATABASES = {
     "default": env.db("DATABASE_URL")
 }
 
-# AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.User"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

@@ -7,3 +7,6 @@ urlpatterns = [
     path("api/v1/", include("organization.urls")),
     re_path(r"^api/", errors.api_not_found),
 ]
+
+handler404 = errors.handler404
+handler500 = errors.handler500
