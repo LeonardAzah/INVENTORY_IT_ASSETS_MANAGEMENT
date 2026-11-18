@@ -92,6 +92,7 @@ class AuthContext:
     administers_organization: bool = False
     read_only: bool = False
     represented_regions: frozenset = frozenset()
+    computing_regions: frozenset = frozenset()
     it_regions: frozenset = frozenset()
     jurisdictions: tuple = ()
     warehouses: tuple = ()
@@ -105,7 +106,7 @@ class AuthContext:
         return frozenset(region_id for _, region_id in self.warehouses)
 
     def covers(self, region_id, office_path, department_id):
-        """The jurisdiction coverage rule"""
+        """The jurisdiction coverage rule."""
         for scope in self.jurisdictions:
             if scope.office_path is None:
                 if scope.region_id == region_id:
@@ -134,11 +135,12 @@ def context_for(user):
     values = {f"{app_label}.{codename}" for app_label, codename in rows}
     codes = frozenset(code for code in Code if code.value in values)
 
-    it_regions = set(
+    computing_regions = frozenset(
         UserProfile.objects.filter(COMPUTING_CHIEF, user=user).values_list(
             "role_region_id", flat=True
         )
     )
+    it_regions = set(computing_regions)
     represented_regions = frozenset(
         UserProfile.objects.filter(REGIONAL_REPRESENTATIVE, user=user).values_list(
             "role_region_id", flat=True
@@ -156,6 +158,7 @@ def context_for(user):
             user=user, ended_at__isnull=True
         ).values_list("region_id", "office__path", "department_id")
     )
+
     assignment_model = apps.get_model("warehouses", "WarehouseAssignment")
     warehouses = tuple(
         assignment_model.objects.filter(user=user, ended_at__isnull=True).values_list(
@@ -168,11 +171,11 @@ def context_for(user):
         administers_organization=administers,
         read_only=read_only,
         represented_regions=represented_regions,
+        computing_regions=computing_regions,
         it_regions=frozenset(it_regions),
         jurisdictions=jurisdictions,
         warehouses=warehouses,
     )
-
 
 def jurisdiction_q(context, prefix=""):
     query = Q(pk__in=[])
@@ -198,11 +201,7 @@ def _region_id(target):
     """The region of an asset, acquisition or warehouse; or the target, if it is a region."""
     return getattr(target, "region_id", None) or target.pk
 
-
 def sees_warehouse(context, warehouse):
-    """The stock of a warehouse is visible to its Store Keeper, to anyone whose
-    jurisdiction covers it, (for the IT warehouse) to the region's IT staff, and to
-    whoever sees the whole organization."""
     if context.sees_organization or warehouse.pk in context.warehouse_ids:
         return True
     if warehouse.type == IT and warehouse.region_id in context.it_regions:
@@ -228,9 +227,9 @@ def _in_scope(context, code, target):
     if code in _CATALOGUE:
         if context.administers_organization:
             return True
+
         needed = Code.IT_ASSET_REGISTER if target.warehouse_type == IT else Code.WAREHOUSE_MANAGE
         return needed in context.codes
-
     if code in _STOCK_VIEWS:
         return sees_warehouse(context, target)
     if code in _ASSET_VIEWS:
@@ -240,7 +239,6 @@ def _in_scope(context, code, target):
         return location is not None and context.covers(
             location.region_id, location.office.path, location.department_id
         )
-
     if code is Code.STORE_KEEPER_ASSIGN:
         if context.administers_organization:
             return True
@@ -268,8 +266,6 @@ def holds(user, code):
     return code in context_for(user).codes
 
 def require(user, code, target=None):
-    """PermissionDenied (403) without the code; Http404 when the target is out of scope,
-    so that the existence of records elsewhere is not revealed. Without a target"""
     context = context_for(user)
     if code not in context.codes:
         raise PermissionDenied
