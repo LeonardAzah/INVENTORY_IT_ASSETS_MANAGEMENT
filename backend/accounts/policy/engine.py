@@ -69,6 +69,7 @@ ORGANIZATION_CODES = frozenset(
         Code.LOCATION_MANAGE,
         Code.EMPLOYEE_MANAGE,
         Code.UOM_MANAGE,
+        Code.SPEC_TEMPLATE_MANAGE,
         Code.JURISDICTION_MANAGE,
         Code.AUDIT_VIEW,
     }
@@ -177,6 +178,7 @@ def context_for(user):
         warehouses=warehouses,
     )
 
+
 def jurisdiction_q(context, prefix=""):
     query = Q(pk__in=[])
     for scope in context.jurisdictions:
@@ -192,14 +194,13 @@ def codes_for(user):
     return context_for(user).codes
 
 def _affiliation(target):
-    """The object that places `target` in the organization: a user's Employee, or the
-    target itself when it carries region, office and department (Employee, Warehouse)."""
     profile = getattr(target, "profile", None)  # a User
     return profile.employee if profile is not None else target
 
+
 def _region_id(target):
-    """The region of an asset, acquisition or warehouse; or the target, if it is a region."""
     return getattr(target, "region_id", None) or target.pk
+
 
 def sees_warehouse(context, warehouse):
     if context.sees_organization or warehouse.pk in context.warehouse_ids:
@@ -207,6 +208,7 @@ def sees_warehouse(context, warehouse):
     if warehouse.type == IT and warehouse.region_id in context.it_regions:
         return True
     return context.covers(warehouse.region_id, warehouse.office.path, warehouse.department_id)
+
 
 def _in_scope(context, code, target):
     if target is None:
@@ -227,7 +229,6 @@ def _in_scope(context, code, target):
     if code in _CATALOGUE:
         if context.administers_organization:
             return True
-
         needed = Code.IT_ASSET_REGISTER if target.warehouse_type == IT else Code.WAREHOUSE_MANAGE
         return needed in context.codes
     if code in _STOCK_VIEWS:
@@ -239,7 +240,9 @@ def _in_scope(context, code, target):
         return location is not None and context.covers(
             location.region_id, location.office.path, location.department_id
         )
+
     if code is Code.STORE_KEEPER_ASSIGN:
+
         if context.administers_organization:
             return True
         if target.is_regional_store:
@@ -252,7 +255,7 @@ def _in_scope(context, code, target):
             return True
         place = _affiliation(target)
         if not hasattr(place, "office_id"):
-            return False 
+            return False
         return context.covers(place.region_id, place.office.path, place.department_id)
     if code in ORGANIZATION_CODES:
         return context.administers_organization

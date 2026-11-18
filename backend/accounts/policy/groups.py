@@ -73,6 +73,7 @@ _ADMINISTRATION = (
     # Code.STORE_KEEPER_ASSIGN,
     # Code.STORE_KEEPER_GRANT,
     # Code.UOM_MANAGE,
+    # Code.SPEC_TEMPLATE_MANAGE,
     # Code.CATEGORY_MANAGE,
     # Code.ITEM_MANAGE,
     # Code.INVENTORY_VIEW,
@@ -106,42 +107,18 @@ GROUP_CODES = {
 MANAGED_GROUPS = frozenset(GROUP_CODES)
 MANAGED_PREFIXES = ("role:", "resp:", "post:")
 
-# def sync_group_permissions(using="default"):
-#     """Makes every group in GROUP_CODES exist with exactly its permission set."""
-#     for name, codes in GROUP_CODES.items():
-#         group, _ = Group.objects.using(using).get_or_create(name=name)
-#         permissions = []
-#         for code in codes:
-#             app_label, codename = code.value.split(".")
-#             permissions.append(
-#                 Permission.objects.using(using).get(
-#                     content_type__app_label=app_label, codename=codename
-#                 )
-#             )
-#         group.permissions.set(permissions)
-
 def sync_group_permissions(using="default"):
     """Makes every group in GROUP_CODES exist with exactly its permission set."""
     for name, codes in GROUP_CODES.items():
         group, _ = Group.objects.using(using).get_or_create(name=name)
         permissions = []
-
         for code in codes:
             app_label, codename = code.value.split(".")
-
-            try:
-                permission = Permission.objects.using(using).get(
-                    content_type__app_label=app_label,
-                    codename=codename,
+            permissions.append(
+                Permission.objects.using(using).get(
+                    content_type__app_label=app_label, codename=codename
                 )
-            except Permission.DoesNotExist:
-                raise LookupError(
-                    f"Permission '{code.value}' does not exist. "
-                    f"Required by group '{name}'."
-                )
-
-            permissions.append(permission)
-
+            )
         group.permissions.set(permissions)
 
 def sync_responsibilities(using="default"):

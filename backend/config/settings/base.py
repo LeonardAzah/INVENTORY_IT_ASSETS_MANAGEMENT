@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     "organization",
     "warehouses",
     "employees",
+    "items",
+    "inventory"
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-        # "accounts.permissions.ReadOnlyForViewer",
+        "accounts.permissions.ReadOnlyForViewer",
     ],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],

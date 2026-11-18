@@ -22,6 +22,7 @@ class Code(Enum):
     UOM_MANAGE = "items.uom_manage"
     CATEGORY_MANAGE = "items.category_manage"
     ITEM_MANAGE = "items.item_manage"
+    SPEC_TEMPLATE_MANAGE = "items.spec_template_manage"
 
     INVENTORY_VIEW = "inventory.inventory_view"
     INVENTORY_RECEIVE = "inventory.inventory_receive"
