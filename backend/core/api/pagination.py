@@ -22,3 +22,33 @@ class EnvelopePagination(PageNumberPagination):
                 },
             }
         )
+
+    def get_paginated_response_schema(self, schema):
+        """For the OpenAPI schema: the shape above, which the envelope then wraps."""
+        nullable_url = {"type": "string", "format": "uri", "nullable": True}
+        return {
+            "type": "object",
+            "properties": {
+                "results": schema,
+                "pagination": {
+                    "type": "object",
+                    "properties": {
+                        "count": {"type": "integer"},
+                        "page": {"type": "integer"},
+                        "page_size": {"type": "integer"},
+                        "total_pages": {"type": "integer"},
+                        "next": nullable_url,
+                        "previous": nullable_url,
+                    },
+                    "required": [
+                        "count",
+                        "page",
+                        "page_size",
+                        "total_pages",
+                        "next",
+                        "previous",
+                    ],
+                },
+            },
+            "required": ["results", "pagination"],
+        }

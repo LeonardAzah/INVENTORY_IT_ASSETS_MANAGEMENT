@@ -2,6 +2,8 @@ from .base import *
 from .base import env
 
 DEBUG = False
+# The OpenAPI schema and Swagger UI are not served in production.
+API_DOCS_ENABLED = False
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

@@ -2,6 +2,7 @@ from .base import *
 from .base import EMAIL_HOST_USER, env
 
 DEBUG = True
+API_DOCS_ENABLED = env.bool("API_DOCS_ENABLED", default=True)
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Without Gmail credentials, emails are printed in the runserver console instead of sent.

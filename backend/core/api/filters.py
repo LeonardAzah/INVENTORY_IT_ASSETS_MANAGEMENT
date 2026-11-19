@@ -2,6 +2,8 @@ from django import forms
 from django.db import models
 from django_filters import Filter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import BaseFilterBackend, OrderingFilter
 
@@ -80,14 +82,13 @@ class StrictBooleanField(forms.Field):
             return False
         raise forms.ValidationError("Enter 'true' or 'false'.")
 
+@extend_schema_field(OpenApiTypes.BOOL)
 class StrictBooleanFilter(Filter):
     """Boolean filter that rejects anything but true/false; django-filter's ignores it."""
-
     field_class = StrictBooleanField
 
 class StrictFilterSet(FilterSet):
     """Base for every FilterSet in the apps' `filters.py`."""
-
     FILTER_DEFAULTS = {
         **FilterSet.FILTER_DEFAULTS,
         models.BooleanField: {"filter_class": StrictBooleanFilter},

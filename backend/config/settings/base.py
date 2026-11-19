@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
     "djoser",
+    "drf_spectacular",
     "core",
     "notifications",
     "audit",
@@ -74,8 +75,6 @@ TIME_ZONE = "Africa/Douala"
 USE_I18N = True
 USE_TZ = True
 
-# Domain models get UUID primary keys from core.models.UUIDModel (U-21). This setting only
-# covers third-party apps, because Django requires it to be an AutoField subclass.
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
@@ -92,6 +91,46 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "core.api.exceptions.envelope_exception_handler",
     # `?format=` is a report parameter (json or pdf), not a renderer switch.
     "URL_FORMAT_OVERRIDE": None,
+
+    # The OpenAPI schema documents every response inside the envelope (apps/core/api/schema.py).
+    "DEFAULT_SCHEMA_CLASS": "core.api.schema.EnvelopeAutoSchema",
+}
+
+API_DOCS_ENABLED = env.bool("API_DOCS_ENABLED", default=False)
+SPECTACULAR_SETTINGS = {
+    "TITLE": "IAM API",
+    "DESCRIPTION": (
+        "Warehouse Inventory and IT Asset Management System. Every JSON response is "
+        "wrapped in the envelope {data, success, message}; business-rule errors carry "
+        "data: {error_code, context}."
+    ),
+    "VERSION": "1.0.0",
+    "SCHEMA_PATH_PREFIX": r"/api/v1",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # Off: inputs and outputs are already separate serializers (`*Input` / `*Output`),
+    # so components keep the names they have in the code.
+    "COMPONENT_SPLIT_REQUEST": False,
+    # One name per choice set, wherever a field of that set appears.
+    "ENUM_NAME_OVERRIDES": {
+        "AdjustmentKindEnum": "inventory.choices.AdjustmentKind",
+        # "AssetStatusEnum": "assets.choices.AssetStatus",
+        "DepartmentKindEnum": "organization.choices.DepartmentKind",
+        "NotificationKindEnum": "notifications.choices.Kind",
+        "NotificationStatusEnum": "notifications.choices.Status",
+        "OfficeKindEnum": "organization.choices.OfficeKind",
+        # The roles an account can be given: every role but SUPER_ADMIN.
+        "ProfileRoleEnum": "accounts.choices.PROFILE_ROLE_CHOICES",
+        # "RelationshipKindEnum": "assets.choices.RelationshipKind",
+        "RoleEnum": "accounts.choices.Role",
+        "StockTakeStatusEnum": "inventory.choices.StockTakeStatus",
+        "StockUnitStatusEnum": "inventory.choices.StockUnitStatus",
+        "TransactionTypeEnum": "inventory.choices.TransactionType",
+        "WarehouseTypeEnum": "warehouses.choices.WarehouseType",
+    },
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "core.api.schema.envelope_responses",
+    ],
 }
 
 SIMPLE_JWT = {
