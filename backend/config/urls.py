@@ -12,6 +12,8 @@ urlpatterns = [
     path("api/v1/", include("employees.urls")),
     path("api/v1/", include("items.urls")),
     path("api/v1/", include("inventory.urls")),
+    path("api/v1/", include("assets.urls")),
+    path("api/v1/", include("reports.urls")),
 ]
 
 # if settings.API_DOCS_ENABLED:

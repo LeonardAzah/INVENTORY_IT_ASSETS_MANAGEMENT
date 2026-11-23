@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     "warehouses",
     "employees",
     "items",
-    "inventory"
+    "inventory",
+    "assets",
 ]
 
 MIDDLEWARE = [
@@ -113,14 +114,14 @@ SPECTACULAR_SETTINGS = {
     # One name per choice set, wherever a field of that set appears.
     "ENUM_NAME_OVERRIDES": {
         "AdjustmentKindEnum": "inventory.choices.AdjustmentKind",
-        # "AssetStatusEnum": "assets.choices.AssetStatus",
+        "AssetStatusEnum": "assets.choices.AssetStatus",
         "DepartmentKindEnum": "organization.choices.DepartmentKind",
         "NotificationKindEnum": "notifications.choices.Kind",
         "NotificationStatusEnum": "notifications.choices.Status",
         "OfficeKindEnum": "organization.choices.OfficeKind",
         # The roles an account can be given: every role but SUPER_ADMIN.
         "ProfileRoleEnum": "accounts.choices.PROFILE_ROLE_CHOICES",
-        # "RelationshipKindEnum": "assets.choices.RelationshipKind",
+        "RelationshipKindEnum": "assets.choices.RelationshipKind",
         "RoleEnum": "accounts.choices.Role",
         "StockTakeStatusEnum": "inventory.choices.StockTakeStatus",
         "StockUnitStatusEnum": "inventory.choices.StockUnitStatus",
