@@ -1,15 +1,77 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
+
+/*
+ * Palette (docs/frontend_implementation_blueprint.md §B.4). The same values are listed in
+ * src/lib/design/palette.ts for the style guide; a unit test keeps the two in step.
+ */
+@theme {
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+  --color-neutral-950: initial;
+
+  --color-primary-50: #e8f0fd;
+  --color-primary-100: #b6d0f7;
+  --color-primary-200: #93baf4;
+  --color-primary-300: #629aee;
+  --color-primary-400: #4486eb;
+  --color-primary-500: #1568e6;
+  --color-primary-600: #0146df;
+  --color-primary-700: #0f4aa3;
+  --color-primary-800: #0c397f;
+  --color-primary-900: #092c61;
+
+  --color-success-50: #e7f8f0;
+  --color-success-100: #b6e9d1;
+  --color-success-200: #92deba;
+  --color-success-300: #60cf9b;
+  --color-success-400: #41c588;
+  --color-success-500: #12b76a;
+  --color-success-600: #10a760;
+  --color-success-700: #0d824b;
+  --color-success-800: #0a653a;
+  --color-success-900: #084d2d;
+
+  --color-error-50: #feeceb;
+  --color-error-100: #fac5c1;
+  --color-error-200: #f8a9a3;
+  --color-error-300: #f5827a;
+  --color-error-400: #f36960;
+  --color-error-500: #f04438;
+  --color-error-600: #da3e33;
+  --color-error-700: #aa3028;
+  --color-error-800: #84251f;
+  --color-error-900: #651d18;
+
+  --color-warning-50: #fef4e6;
+  --color-warning-100: #fdddb3;
+  --color-warning-200: #fbcc8e;
+  --color-warning-300: #fab55a;
+  --color-warning-400: #f9a63a;
+  --color-warning-500: #f79009;
+  --color-warning-600: #e18308;
+  --color-warning-700: #af6606;
+  --color-warning-800: #884f05;
+  --color-warning-900: #683c04;
+}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans:
+    var(--font-figtree), ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,73 +110,41 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Semantic tokens (blueprint §I). Components use these names, not palette steps. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --radius: 0.5rem;
+  --background: var(--color-neutral-50);
+  --foreground: var(--color-neutral-900);
+  --card: #ffffff;
+  --card-foreground: var(--color-neutral-900);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-neutral-900);
+  --primary: var(--color-primary-600);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-neutral-100);
+  --secondary-foreground: var(--color-neutral-900);
+  --muted: var(--color-neutral-100);
+  --muted-foreground: var(--color-neutral-500);
+  --accent: var(--color-neutral-100);
+  --accent-foreground: var(--color-neutral-900);
+  /* Filled status surfaces carry white text, so they use the 700 step. */
+  --destructive: var(--color-error-700);
+  --border: var(--color-neutral-200);
+  --input: var(--color-neutral-300);
+  --ring: var(--color-primary-600);
+  --chart-1: var(--color-primary-600);
+  --chart-2: var(--color-success-600);
+  --chart-3: var(--color-warning-600);
+  --chart-4: var(--color-error-600);
+  --chart-5: var(--color-neutral-500);
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--color-neutral-900);
+  --sidebar-primary: var(--color-primary-600);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--color-primary-50);
+  --sidebar-accent-foreground: var(--color-primary-700);
+  --sidebar-border: var(--color-neutral-200);
+  --sidebar-ring: var(--color-primary-600);
 }
 
 @layer base {
@@ -123,8 +153,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
   }
 }
