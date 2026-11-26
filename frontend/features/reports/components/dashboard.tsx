@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-// import { ROW_LINK } from '@/features/accounts/components/shared';
+import { ROW_LINK } from '@/features/accounts/components/shared';
 import {
   EVENT_LABELS,
   statusLabel,
@@ -24,7 +24,7 @@ import {
   TRANSACTION_TYPE_LABELS,
   type TransactionType,
 } from '@/features/inventory/types';
-// import { formatQuantity } from '@/lib/format/quantity';
+import { formatQuantity } from '@/lib/format/quantity';
 import { can } from '@/lib/permissions/codes';
 
 import { useDashboard, type Dashboard } from '../api';
@@ -218,12 +218,12 @@ function Figures({ data, stock, assets, register }: FiguresProps) {
                       key={status}
                       className="flex items-center justify-between gap-4 py-1 first:pt-0 last:pb-0"
                     >
-                      {/* <Link
+                      <Link
                         href={`/it/assets?status=${status}`}
                         className={ROW_LINK}
                       >
                         {statusLabel(status)}
-                      </Link> */}
+                      </Link>
                       <span className="font-medium tabular-nums">{count}</span>
                     </li>
                   ))}
@@ -276,12 +276,12 @@ function Figures({ data, stock, assets, register }: FiguresProps) {
               <CardTitle>Latest stock movements</CardTitle>
               <CardDescription>
                 The ten most recent, newest first.{' '}
-                {/* <Link
+                <Link
                   href="/inventory/transactions"
                   className={`${ROW_LINK} underline`}
                 >
                   Open the ledger
-                </Link> */}
+                </Link>
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -307,9 +307,9 @@ function Figures({ data, stock, assets, register }: FiguresProps) {
                         </span>
                       </p>
                       {/* The sign carries the direction, so the meaning does not depend on colour. */}
-                      {/* <span className="shrink-0 text-sm font-medium tabular-nums">
+                      <span className="shrink-0 text-sm font-medium tabular-nums">
                         {formatQuantity(movement.quantity, { signed: true })}
-                      </span> */}
+                      </span>
                     </li>
                   ))}
                 </ul>
